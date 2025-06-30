@@ -7,6 +7,12 @@ A modern, responsive note-taking application built with the MERN stack (MongoDB,
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-8.14.3-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
+## 🌐 Live Demo
+
+**🚀 [View Live Application](https://mern-stack-thinkboard-57eb.onrender.com/)**
+
+Experience the full application with all features including note creation, editing, deletion, and rate limiting in action!
+
 ## ✨ Features
 
 - **📝 Full CRUD Operations**: Create, read, update, and delete notes seamlessly
