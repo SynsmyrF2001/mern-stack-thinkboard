@@ -191,7 +191,7 @@ This project is licensed under the ISC License.
 
 ## 👨‍💻 Developer
 
-**SynsmyrF2001**
+**Synsmyr Forgue**
 - GitHub: [@SynsmyrF2001](https://github.com/SynsmyrF2001)
 - Project: [MERN Thinkboard](https://github.com/SynsmyrF2001/mern-stack-thinkboard)
 
