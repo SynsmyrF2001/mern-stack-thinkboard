@@ -1,42 +1,42 @@
-import { use, useState } from "react"
-import Navbar from "../components/Navbar"
-import RateLimitedUI from "../components/RateLimitedUI"
-import { useEffect } from "react"
-import { toast } from "react-hot-toast"
-import NoteCard from "../components/NoteCard"
-import api from "../lib/axios"
-import NotesNotFound from "../components/NotesNotFound"
+import { useState } from "react";
+import Navbar from "../components/Navbar";
+import RateLimitedUI from "../components/RateLimitedUI";
+import { useEffect } from "react";
+import api from "../lib/axios";
+import toast from "react-hot-toast";
+import NoteCard from "../components/NoteCard";
+import NotesNotFound from "../components/NotesNotFound";
 
 const HomePage = () => {
-  const [isRateLimited, setIsRateLimited] = useState(false)
-  const [notes, setNotes] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await api.get("/notes")
-        setNotes(res.data)
-        setIsRateLimited(false)
-        console.log(res.data)
+        const res = await api.get("/notes");
+        console.log(res.data);
+        setNotes(res.data);
+        setIsRateLimited(false);
       } catch (error) {
-        console.error("Error fetching notes")
-        console.log(error)
+        console.log("Error fetching notes");
+        console.log(error.response);
         if (error.response?.status === 429) {
-          setIsRateLimited(true)
+          setIsRateLimited(true);
         } else {
-          toast.error("Failed to load notes")
+          toast.error("Failed to load notes");
         }
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchNotes()
-  }, [])
+    fetchNotes();
+  }, []);
 
   return (
-    <div className='min-h-screen'>
+    <div className="min-h-screen">
       <Navbar />
 
       {isRateLimited && <RateLimitedUI />}
@@ -49,13 +49,12 @@ const HomePage = () => {
         {notes.length > 0 && !isRateLimited && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {notes.map((note) => (
-              <NoteCard key={note._id} note={note} setNotes={setNotes}/>
+              <NoteCard key={note._id} note={note} setNotes={setNotes} />
             ))}
           </div>
         )}
       </div>
     </div>
-  )
-}   
-
-export default HomePage
+  );
+};
+export default HomePage;
