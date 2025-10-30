@@ -7,22 +7,38 @@ A modern, responsive note-taking application built with the MERN stack (MongoDB,
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-8.14.3-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-## 🌐 Live Demo
+## 🚀 Quick Start
 
-**🚀 [View Live Application](https://mern-stack-thinkboard-57eb.onrender.com/)**
+Get the application running locally in just a few commands:
 
-Experience the full application with all features including note creation, editing, deletion, and rate limiting in action!
+```bash
+# Clone the repository
+git clone https://github.com/SynsmyrF2001/mern-stack-thinkboard.git
+cd mern-stack-thinkboard
+
+# Start MongoDB with Docker
+docker run -d --name mongodb -p 27017:27017 mongo:latest
+
+# Install dependencies and start the application
+npm run install-all
+npm run dev
+```
+
+**Access the application:**
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5001/api
 
 ## ✨ Features
 
 - **📝 Full CRUD Operations**: Create, read, update, and delete notes seamlessly
 - **🎨 Modern UI/UX**: Beautiful, responsive design with Tailwind CSS and DaisyUI
-- **⚡ Real-time Rate Limiting**: Built-in protection against API abuse using Upstash Redis
+- **⚡ Smart Rate Limiting**: Built-in protection with fallback for development
 - **📱 Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **🚀 Production Ready**: Optimized for deployment with proper error handling
+- **🚀 Developer Friendly**: One-command setup with Docker and concurrent servers
 - **🔄 Real-time Updates**: Instant UI updates when notes are modified
 - **🎯 User Experience**: Toast notifications, loading states, and error handling
 - **🔒 API Security**: CORS configuration and request validation
+- **🐳 Docker Integration**: Easy MongoDB setup with Docker containers
 
 ## 🛠️ Tech Stack
 
@@ -49,8 +65,7 @@ Experience the full application with all features including note creation, editi
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- MongoDB database (local or cloud)
-- Upstash Redis account (for rate limiting)
+- Docker Desktop (for MongoDB)
 
 ### Installation
 
@@ -60,41 +75,29 @@ Experience the full application with all features including note creation, editi
    cd mern-stack-thinkboard
    ```
 
-2. **Install dependencies**
+2. **Start MongoDB with Docker**
    ```bash
-   # Install root dependencies
-   npm install
-   
-   # Install backend dependencies
-   cd backend && npm install
-   
-   # Install frontend dependencies
-   cd ../frontend && npm install
+   docker run -d --name mongodb -p 27017:27017 mongo:latest
    ```
 
-3. **Environment Setup**
-   
-   Create a `.env` file in the `backend` directory:
-   ```env
-   MONGODB_URI=your_mongodb_connection_string
-   UPSTASH_REDIS_REST_URL=your_upstash_redis_url
-   UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_token
-   PORT=5001
-   NODE_ENV=development
-   ```
-
-4. **Start the application**
+3. **Install dependencies and start the application**
    ```bash
-   # Start backend server (from root directory)
-   npm run start
+   # Install all dependencies
+   npm run install-all
    
-   # Start frontend development server (in another terminal)
-   cd frontend && npm run dev
+   # Start both backend and frontend servers
+   npm run dev
    ```
 
-5. **Access the application**
+4. **Access the application**
    - Frontend: http://localhost:5173
-   - Backend API: http://localhost:5001
+   - Backend API: http://localhost:5001/api
+
+### Alternative: One-Command Setup
+```bash
+# Use the automated startup script
+./start-dev.sh
+```
 
 ## 📁 Project Structure
 
@@ -165,17 +168,72 @@ Comprehensive error handling throughout the application:
 - User-friendly error messages
 - Graceful fallbacks
 
-## 🚀 Deployment
+## 🔧 Development Scripts
 
-### Backend Deployment
-1. Set up environment variables on your hosting platform
-2. Configure MongoDB connection
-3. Set up Upstash Redis for rate limiting
-4. Deploy to platforms like Heroku, Railway, or Render
+### Available Commands
+```bash
+# Root level
+npm run dev          # Start both backend and frontend
+npm run build        # Build for production
+npm run start        # Start production server
+npm run install-all  # Install all dependencies
 
-### Frontend Deployment
-1. Build the application: `npm run build`
-2. Deploy the `dist` folder to platforms like Vercel, Netlify, or GitHub Pages
+# Backend only
+cd backend
+npm run dev          # Start with nodemon (development)
+npm run start        # Start production server
+
+# Frontend only
+cd frontend
+npm run dev          # Start Vite dev server
+npm run build        # Build for production
+npm run preview      # Preview production build
+```
+
+### Docker Commands
+```bash
+# Start MongoDB
+docker run -d --name mongodb -p 27017:27017 mongo:latest
+
+# Stop MongoDB
+docker stop mongodb
+
+# Remove MongoDB container
+docker rm mongodb
+
+# View MongoDB logs
+docker logs mongodb
+```
+
+## 🧪 Testing the Application
+
+### API Testing
+```bash
+# Get all notes
+curl http://localhost:5001/api/notes
+
+# Create a note
+curl -X POST http://localhost:5001/api/notes \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Test Note", "content": "This is a test note"}'
+
+# Get specific note (replace {id} with actual note ID)
+curl http://localhost:5001/api/notes/{id}
+
+# Update note
+curl -X PUT http://localhost:5001/api/notes/{id} \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Updated Title", "content": "Updated content"}'
+
+# Delete note
+curl -X DELETE http://localhost:5001/api/notes/{id}
+```
+
+### Frontend Testing
+1. Open http://localhost:5173 in your browser
+2. Test note creation, editing, and deletion
+3. Test responsive design on different screen sizes
+4. Test rate limiting by making multiple rapid requests
 
 ## 🤝 Contributing
 
@@ -256,7 +314,7 @@ As my **first ever project in Swift**, the Tether Weather App allowed me to:
 
 ---
 
-### 🧠 **MERN Thinkboard - Full-Stack Note-Taking App** | [Live Demo](https://mern-stack-thinkboard-57eb.onrender.com/) | [GitHub](https://github.com/SynsmyrF2001/mern-stack-thinkboard)
+### 🧠 **MERN Thinkboard - Full-Stack Note-Taking App** | [GitHub](https://github.com/SynsmyrF2001/mern-stack-thinkboard)
 
 #### 🔹 Overview:    
 
