@@ -17,21 +17,54 @@
  * function is called to proceed to the next middleware in the stack. If the rate limit
  */
 
-import {ratelimit} from "../config/upstash.js";
+// Simple in-memory rate limiter for local development
+const requestCounts = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 100; // 100 requests per minute
 
 const rateLimiter = async (req, res, next) => {
-    try{
-        const {success, limit, remaining} = await ratelimit.limit("my-rate-limit"); //limit the request to the ip address, limit is the maximum number of requests, remaining is the number of requests remaining
-       
-        if(!success){
-            return res.status(429).json({message: "Too many requests, please try again later"}); //if the request is not successful, return a 429 status code and a message
+    try {
+        // Skip rate limiting in development if Redis is not available
+        if (process.env.NODE_ENV === 'development' && !process.env.UPSTASH_REDIS_REST_URL) {
+            return next();
         }
 
-        next(); //if the request is successful, proceed to the next middleware
-    }
-    catch(error){
-        console.error("Rate limit error", error); //if there is an error, log the error
-        next(error); //proceed to the next middleware
+        // Use Upstash Redis if available
+        if (process.env.UPSTASH_REDIS_REST_URL) {
+            const { ratelimit } = await import("../config/upstash.js");
+            const { success, limit, remaining } = await ratelimit.limit("my-rate-limit");
+            
+            if (!success) {
+                return res.status(429).json({ message: "Too many requests, please try again later" });
+            }
+        } else {
+            // Fallback to simple in-memory rate limiting
+            const clientId = req.ip || 'anonymous';
+            const now = Date.now();
+            const windowStart = now - RATE_LIMIT_WINDOW;
+            
+            // Clean old entries
+            if (requestCounts.has(clientId)) {
+                const requests = requestCounts.get(clientId).filter(time => time > windowStart);
+                requestCounts.set(clientId, requests);
+            }
+            
+            // Check rate limit
+            const requests = requestCounts.get(clientId) || [];
+            if (requests.length >= MAX_REQUESTS) {
+                return res.status(429).json({ message: "Too many requests, please try again later" });
+            }
+            
+            // Add current request
+            requests.push(now);
+            requestCounts.set(clientId, requests);
+        }
+
+        next();
+    } catch (error) {
+        console.error("Rate limit error", error);
+        // In case of error, allow the request to proceed
+        next();
     }
 };
 
